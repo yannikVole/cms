@@ -12,6 +12,18 @@
                 <li class="nav-item">
                     <a href="{{ url('media_upload') }}" class="nav-link">Upload File</a>
                 </li>
+                {% if app.user == null %}
+                <li class="nav-item">
+                    <a href="{{ url('user_register') }}" class="nav-link">Register</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url('user_login') }}" class="nav-link">Login</a>
+                </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a href="{{ url("user_logout") }}" class="nav-link">Logout</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </div>

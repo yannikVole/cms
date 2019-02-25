@@ -1,0 +1,80 @@
+{% extends "base.html.twig" %}
+{% block body %}
+    <div class="media--list-wrapper">
+        {% for item in mediaItems %}
+            <div class="media--item-wrapper">
+                <div class="media--action-container"><span class="media--action-copy"><i class="far fa-copy"></i></span></div>
+                <a href="{{ path('media_show_item', {'fileName': item.filename}) }}"><img src="/media/{{ item.filename }}" alt="{{ item.filename }}"></a>
+                <p><small>Description: {{ item.description }}</small></p>
+            </div>
+        {% endfor %}
+    </div>
+    <style>
+        .media--list-wrapper{
+            display:flex;
+            flex-direction: row;
+            flex-wrap:wrap;
+            overflow:hidden;
+        }
+        .media--action-container{
+            position:absolute;
+            height:15px;
+            font-size:15px;
+            margin:0;
+            padding:0;
+            background:rgba(0,0,0,0);
+            top:-20px;
+            left:0;
+            right:0;
+            transition: top 0.2s ease-in;
+        }
+        .media--action-copy{
+            display:block;
+            background: #2da3ff;
+            width:30px;
+            height:30px;
+
+            border-radius:15px;
+            text-align:center;
+            color:#fff;
+            border:2px solid #fff;
+            float:right;
+        }
+        .media--item-wrapper{
+            position:relative;
+            margin:5px;
+            box-shadow:1px 1px 1px rgba(0,0,0,0.3);
+            width:25%;
+            height:200px;
+            overflow:hidden;
+            transition: flex-grow 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            flex-basis:21%;
+            flex-grow:1;
+        }
+        .media--item-wrapper:hover{
+            box-shadow:1px 1px 5px 3px rgba(0,0,0,0.5);
+            flex-grow: 2;
+        }
+        .media--item-wrapper:hover .media--action-container{
+            top:0;
+        }
+        .media--item-wrapper img {
+            display:block;
+            width:100%;
+            object-fit: cover;
+            margin:0 auto;
+        }
+        .media--item-wrapper p {
+            height:40px;
+            text-align:center;
+            position:absolute;
+            bottom:0;
+            left:0;
+            right:0;
+            background-color:rgba(0,0,0,0.6);
+            z-index:999;
+            margin:0;
+            color:#fff;
+        }
+    </style>
+{% endblock %}

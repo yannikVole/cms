@@ -1,36 +1,74 @@
 <?php
+
 namespace App\Entity;
 
-class MediaItem {
+use Doctrine\ORM\Mapping as ORM;
 
-    private $item;
+/**
+ * @ORM\Entity(repositoryClass="App\Repository\MediaItemRepository")
+ */
+class MediaItem
+{
+    /**
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     * @ORM\Column(type="integer")
+     */
+    private $id;
 
-    private $uploadDate;
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="timestamp")
+     */
+    private $user;
 
-    public function getItem(){
-        return $this->item;
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $description;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $filename;
+
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
-    public function setItem($item){
-        $this->item = $item;
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getUploadDate()
+    public function getDescription(): ?string
     {
-        return $this->uploadDate;
+        return $this->description;
     }
 
-    /**
-     * @param \DateTime $uploadDate
-     */
-    public function setUploadDate(\DateTime $uploadDate = null)
+    public function setDescription(?string $description): self
     {
-       return $this->uploadDate = $uploadDate;
+        $this->description = $description;
+
+        return $this;
     }
 
+    public function getFilename(): ?string
+    {
+        return $this->filename;
+    }
+
+    public function setFilename(string $filename): self
+    {
+        $this->filename = $filename;
+
+        return $this;
+    }
 }
