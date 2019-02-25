@@ -5,6 +5,7 @@ use App\Entity\MediaItem;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,7 +25,10 @@ class MediaController extends AbstractController{
         $mediaItem = new MediaItem();
 
         $form = $this->createFormBuilder($mediaItem)
-            ->add("item", FileType::class)
+            ->add("filename", FileType::class)
+            ->add("description", TextType::class,[
+                "required" => false
+            ])
             ->add("submit", SubmitType::class,[
                 "label" => "Upload"
             ])
@@ -32,9 +36,9 @@ class MediaController extends AbstractController{
 
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-            $mediaItem->setUploadDate(new \DateTime());
+            $mediaItem->setUser($this->getUser());
             /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
-            $file = $mediaItem->getItem();
+            $file = new UploadedFile($mediaItem->getFilename(),$mediaItem->getFilename());
             // handle file upload and save path to database
             $fileName = $this->generateUniqueFilename().'.'.$file->guessExtension();
             try {
@@ -45,7 +49,10 @@ class MediaController extends AbstractController{
             } catch (FileException $e){
                 die($e);
             }
-            $mediaItem->setItem($fileName);
+            $mediaItem->setFilename($fileName);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($mediaItem);
+            $em->flush();
             //redirect to uploaded media
             return $this->redirect($this->generateUrl("media_show_item",[
                 "fileName" => $fileName
@@ -55,6 +62,17 @@ class MediaController extends AbstractController{
 
         return $this->render("media/upload.html.twig",[
             "form" => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/all",name="media_show_all")
+     */
+    public function all(){
+        $em = $this->getDoctrine()->getManager();
+        $mediaItems = $em->getRepository(MediaItem::class)->findAll();
+        return $this->render("media/show_all.html.twig",[
+            "mediaItems" => $mediaItems
         ]);
     }
 

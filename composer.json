@@ -12,9 +12,11 @@
         "symfony/form": "4.2.*",
         "symfony/framework-bundle": "4.2.*",
         "symfony/orm-pack": "^1.0",
-        "symfony/profiler-pack": "^1.0",
         "symfony/requirements-checker": "^1.1",
+        "symfony/security-bundle": "4.2.*",
         "symfony/twig-bundle": "4.2.*",
+        "symfony/validator": "4.2.*",
+        "symfony/webpack-encore-bundle": "^1.1",
         "symfony/yaml": "4.2.*"
     },
     "config": {
@@ -62,5 +64,9 @@
             "allow-contrib": false,
             "require": "4.2.*"
         }
+    },
+    "require-dev": {
+        "symfony/maker-bundle": "^1.11",
+        "symfony/profiler-pack": "^1.0"
     }
 }
